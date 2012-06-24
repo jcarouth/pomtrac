@@ -19,7 +19,7 @@ $app = new Slim(array(
     'templates.path' => BASEPATH . "/templates",
 ));
 
-$app->add(new PomTrac_Middleware_AcceptJson());
+$app->add(new PomTrac_Middleware_RestfulContext());
 
 $app->get('/', function() use ($app) {
     $app->render('index');
