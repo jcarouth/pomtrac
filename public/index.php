@@ -37,4 +37,21 @@ $app->get('/tasks', function() use ($app) {
     );
 });
 
+$app->post('/tasks', function() use ($app) {
+    $request = $app->request();
+
+    $taskData = json_decode($request->getBody());
+
+    //save task to data store
+    $response = $app->response();
+    $response->status(201);
+    $response['Location'] = sprintf(
+        "%s://%s/%s/%d",
+        $request->getScheme(),
+        $request->getHost(),
+        "tasks",
+        3
+    );
+});
+
 $app->run();
