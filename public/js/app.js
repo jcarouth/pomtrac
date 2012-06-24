@@ -6,7 +6,7 @@ App.MainView = Backbone.View.extend({
 
   initialize: function() {
     this.collection = new App.Tasks();
-    this.collection.url = "/api/tasks";
+    this.collection.url = "/tasks";
     this.collection.fetch({
       success: _.bind(function(resp, status, xhr) {
         this.render(); 

@@ -5,5 +5,5 @@ App.Task = Backbone.Model.extend({
         addedDate: moment()
     };
   },
-  urlRoot: "api/tasks"
+  urlRoot: "tasks"
 });
