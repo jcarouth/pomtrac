@@ -1,5 +1,5 @@
 <?php
-defined('BASEPATH') || define('BASEPATH', realpath(__DIR__."/../"));
+define('BASEPATH', realpath(__DIR__."/../"));
 
 set_include_path(implode(
     PATH_SEPARATOR,
@@ -15,7 +15,7 @@ set_include_path(implode(
 $loader = require_once BASEPATH . "/vendor/autoload.php";
 $loader->setUseIncludePath(true);
 
-use PomTrac\Helpers as Utils;
+require_once BASEPATH."/lib/PomTrac/Helpers.php";
 
 $app = new Slim(array(
     'templates.path' => BASEPATH . "/templates",
@@ -37,16 +37,21 @@ $app->get('/', function() use ($app) {
 });
 
 $app->get('/tasks', function() use ($app) {
+    $collection = $app->dataStore->tasks;
+    $tasks = iterator_to_array($collection->find());
     $app->render(
         'tasks', 
         array(
-            'tasks' => iterator_to_array($app->dataStore->tasks->find()),
+            'tasks' => $tasks, 
         )
     );
 });
 
 $app->get('/tasks/:id', function($id) use ($app) {
-    $task = $app->dataStore->tasks->findOne(array('_id' => new MongoId($id)));
+    $collection = $app->dataStore->tasks;
+    $task = $collection->findOne(
+        array('_id' => new MongoId($id))
+    );
 
     if (null === $task) {
         $app->response()->status(404);
@@ -75,8 +80,13 @@ $app->post('/tasks', function() use ($app) {
 
     if(true === $app->dataStore->tasks->insert($pomData)) {
         $response->status(201);
-        $resUri = "tasks/".(string)$pomData["_id"];
-        $response['Location'] = Utils\buildUrl($request, $resUri);
+
+        $resourceLocation = PomTrac\Helpers\buildUrl(
+            $request,
+            "tasks/".(string)$pomData["_id"]
+        );
+        
+        $response['Location'] = $resourceLocation;
     } else {
         $response->status(500);
     }
@@ -84,7 +94,14 @@ $app->post('/tasks', function() use ($app) {
 
 $app->put('/tasks/:id', function($id) use ($app) {
     $data = $app->request()->getBody();
-    $data = $data + array('summary' => '', 'estimate' => null, 'completed' => false);
+
+    $requiredFields = array(
+        'summary' => '',
+        'estimate' => null,
+        'completed' => false,
+    );
+
+    $data = $data + $requiredFields;
 
     $updateResult = $app->dataStore->tasks->update(
         array("_id" => new MongoId($id)),
