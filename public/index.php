@@ -33,7 +33,7 @@ $app->hook('slim.before', function() use ($app) {
 });
 
 $app->get('/', function() use ($app) {
-    $app->render('index');
+    $app->render('index.html');
 });
 
 $app->get('/tasks', function() use ($app) {
