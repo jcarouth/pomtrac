@@ -37,9 +37,12 @@ class PomTrac_Middleware_RestfulContext extends Slim_Middleware
     {
         $acceptHeader = $request->headers('Accept');
 
+        $contentTypeParts = preg_split('/\s*[;,]\s*/', $acceptHeader);
+        $acceptKey = strtolower($contentTypeParts[0]);
+
         //assume only a single media range
-        if (array_key_exists($acceptHeader, $this->acceptHeaders)) {
-            $contextKey = $this->acceptHeaders[$acceptHeader];
+        if (array_key_exists($acceptKey, $this->acceptHeaders)) {
+            $contextKey = $this->acceptHeaders[$acceptKey];
 
             return $this->contexts[$contextKey];
         }
