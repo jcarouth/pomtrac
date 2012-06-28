@@ -1,26 +1,15 @@
 window.App = {};
 
-// App.MainView is the top-level UI for PomTrac
-App.MainView = Backbone.View.extend({
-  el: $("#pomtracapp"),
+App.init = function() {
+  var ActivityInventory = null;
 
-  initialize: function() {
-    this.collection = new App.Tasks();
-    this.collection.url = "/tasks";
-    this.collection.fetch({
-      success: _.bind(function(resp, status, xhr) {
-        this.render(); 
-      }, this)
-    });
-  }, 
+  $.ajaxSetup({
+    'dataType': 'json'
+  });
 
-  render: function() {
-    this.collection.each(this.renderTask, this);
-  },
+  Backbone.emulateHTTP = true;
 
-  renderTask: function(model) {
-    var taskView = new App.TaskView({model: model});
-    console.dir(taskView.el);
-    $("#activityinventory").append(taskView.el);
-  }
-});
+  ActivityInventory = new App.ActivityInventoryView({ 
+    el: $('#activityinventory')
+  });
+};

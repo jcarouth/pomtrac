@@ -1,9 +1,11 @@
 App.Task = Backbone.Model.extend({
+  urlRoot: "tasks/",
   defaults: function() {
     return {
-        summary: "",
-        addedDate: moment()
+      id: "",
+      summary: "",
+      createdDate: moment(),
+      estimate: null
     };
-  },
-  urlRoot: "tasks"
+  }
 });

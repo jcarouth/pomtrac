@@ -13,3 +13,15 @@ function buildUrl($request, $uri = '') {
         '/'
     );
 }
+
+function convertMongoTypes(&$item) {
+    //fix mongo data types
+    $item['id'] = (string)$item['_id'];
+    $item['createdDate'] = date('c', $item['createdDate']->sec);
+
+    if ($item['estimate'] === null) {
+        $item['estimate'] = '';
+    }
+
+    unset($item["_id"]);
+}

@@ -38,7 +38,8 @@ $app->get('/', function() use ($app) {
 
 $app->get('/tasks', function() use ($app) {
     $collection = $app->dataStore->tasks;
-    $tasks = iterator_to_array($collection->find());
+    $tasks = iterator_to_array($collection->find(), false);
+    array_walk($tasks, "PomTrac\Helpers\convertMongoTypes");
     $app->render(
         'tasks', 
         array(
@@ -56,6 +57,7 @@ $app->get('/tasks/:id', function($id) use ($app) {
     if (null === $task) {
         $app->response()->status(404);
     } else {
+        PomTrac\Helpers\convertMongoTypes($task);
         $app->render(
             'task',
             array(

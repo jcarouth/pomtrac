@@ -10,6 +10,11 @@
   <meta name="viewport" content="width=device-width">
 
   <link rel="stylesheet" href="css/style.css">
+  <script type="text/javascript" id="pomtrac-task-tmpl">
+    <input class="summary textinput" type="text" value="<%= summary %>"> 
+    <input class="estimate textinput" type="text" value="<%= estimate %>">
+    <div class="strike">[del]</div>
+  </script>
   <script src="js/lib/jquery-1.7.2.min.js"></script>
   <script src="js/lib/moment.min.js"></script>
   <script src="js/lib/underscore-min.js"></script>
@@ -19,7 +24,8 @@
   <script src="js/app/task.js"></script>
   <script src="js/app/tasks.js"></script>
   <script src="js/app/taskview.js"></script>
-  <script src="js/setup.js"></script>
+  <script src="js/app/activityinventoryview.js"></script>
+  <script src="js/bootstrap.js"></script>
 </head>
 
 <body>
